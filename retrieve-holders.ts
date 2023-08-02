@@ -11,15 +11,23 @@ const addresses = [
 
 const main = async () => {
   try {
-    for (const element of addresses) {
-        const walletBalance = await rpcProvider
-      .getBalance(element)
-      .then((balance) => {
-        const balanceInBNB = ethers.formatEther(balance);
-        console.log(`${element} ${parseFloat(balanceInBNB).toFixed(8)}`);
-      });
-      }
-    
+    // for (const element of addresses) {
+    //   const walletBalance = await rpcProvider
+    //     .getBalance(element)
+    //     .then((balance) => {
+    //       const balanceInBNB = ethers.formatEther(balance);
+    //       console.log(`${element} ${parseFloat(balanceInBNB).toFixed(8)}`);
+    //     });
+    // }
+
+    await Promise.all(
+      addresses.map((address) =>
+        rpcProvider.getBalance(address).then((balance) => {
+          const balanceInBNB = ethers.formatEther(balance);
+          console.log(`${address} ${parseFloat(balanceInBNB).toFixed(8)}`);
+        })
+      )
+    );
 
     // console.log(`BNB Balance: ${ethers.utils.formatEther(walletBalance)}`); // can't seem to use utils to format input
   } catch (error) {
